@@ -43,6 +43,8 @@ function loadData() {
 
     //Wikipedia Ajax request.
     var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + cityStr + '&format=json&callback=wikiCallback';
+    //Solution for error handler using setTimeout(fallBack).
+    var wikiRequestTimeout = setTimeout(function(){$wikiElem.text("failed to get wikipedia resources")},8000);
 
     $.ajax(wikiUrl,{
       dataType: "jsonp",
@@ -54,6 +56,8 @@ function loadData() {
           var url = 'http://en.wikipedia.org/wiki/' + articleStr;
           $wikiElem.append('<li><a href="' + url + '">"' + articleStr + '</a></li>');
         };
+        //If we get the response you clear the fallBack wikiRequestTimeout
+        clearTimeout(wikiRequestTimeout);
       }
     });
 
